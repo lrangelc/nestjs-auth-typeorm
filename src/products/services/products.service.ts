@@ -8,26 +8,15 @@ import { CreateProductDto, UpdateProductDto } from './../dtos/products.dtos';
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectRepository(Product) private productRepo: Repository<Product>,
-  ) {}
-  // private counterId = 1;
-  // private products: Product[] = [
-  //   {
-  //     id: 1,
-  //     name: 'Producto 1',
-  //     description: 'lorem lorem',
-  //     price: 10000,
-  //     stock: 300,
-  //     image: 'https://i.imgur.com/U4iGx1j.jpeg',
-  //   },
-  // ];
+    @InjectRepository(Product) private productRepository: Repository<Product>,
+  ) { }
 
   findAll() {
-    return this.productRepo.find();
+    return this.productRepository.find();
   }
 
-  findOne(id: number) {
-    const product = this.productRepo.findOne(id);
+  async findOne(id: number) {
+    const product = await this.productRepository.findOne(id);
     if (!product) {
       throw new NotFoundException(`Product #${id} not found`);
     }
@@ -35,31 +24,31 @@ export class ProductsService {
   }
 
   create(data: CreateProductDto) {
-    // this.counterId = this.counterId + 1;
-    // const newProduct = {
-    //   id: this.counterId,
-    //   ...data,
-    // };
-    // this.products.push(newProduct);
-    // return newProduct;
+    // const newProduct = new Product();
+
+    // newProduct.image = data.image;
+    // newProduct.name = data.name;
+    // newProduct.description = data.description;
+    // newProduct.price = data.price;
+    // newProduct.stock = data.stock;
+
+    const newProduct = this.productRepository.create(data);
+    return this.productRepository.save(newProduct);
   }
 
-  update(id: number, changes: UpdateProductDto) {
-    // const product = this.findOne(id);
-    // const index = this.products.findIndex((item) => item.id === id);
-    // this.products[index] = {
+  async update(id: number, changes: UpdateProductDto) {
+    const product = await this.productRepository.findOne(id);
+    console.log(product);
+    this.productRepository.merge(product, changes);
+    return this.productRepository.save(product);
+
+    // return this.productRepository.save({
     //   ...product,
-    //   ...changes,
-    // };
-    // return this.products[index];
+    //   ...changes, // existing fields
+    // });
   }
 
   remove(id: number) {
-    // const index = this.products.findIndex((item) => item.id === id);
-    // if (index === -1) {
-    //   throw new NotFoundException(`Product #${id} not found`);
-    // }
-    // this.products.splice(index, 1);
-    // return true;
+    return this.productRepository.delete(id);
   }
 }
