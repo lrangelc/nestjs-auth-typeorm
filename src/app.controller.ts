@@ -19,4 +19,9 @@ export class AppController {
   hello() {
     return 'con /sas/';
   }
+
+  @Get('tasks')
+  getTasks(): Promise<any> {
+    return this.appService.getTasks();
+  }
 }
