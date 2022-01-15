@@ -9,7 +9,7 @@ import { CreateProductDto, UpdateProductDto } from './../dtos/products.dtos';
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
-  ) { }
+  ) {}
 
   findAll() {
     return this.productRepository.find();
@@ -41,11 +41,6 @@ export class ProductsService {
     console.log(product);
     this.productRepository.merge(product, changes);
     return this.productRepository.save(product);
-
-    // return this.productRepository.save({
-    //   ...product,
-    //   ...changes, // existing fields
-    // });
   }
 
   remove(id: number) {
