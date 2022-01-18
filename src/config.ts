@@ -14,5 +14,19 @@ export default registerAs('config', () => {
       user: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
     },
+    mysql: {
+      host: process.env.MYSQL_HOST,
+      dbName: process.env.MYSQL_DB,
+      port: parseInt(process.env.MYSQL_PORT, 10),
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+    },
+    sqlserver: {
+      host: process.env.SQLSERVER_HOST,
+      dbName: process.env.SQLSERVER_DB,
+      port: parseInt(process.env.SQLSERVER_PORT, 10),
+      user: process.env.SQLSERVER_USER,
+      password: process.env.SQLSERVER_PASSWORD,
+    },
   };
 });

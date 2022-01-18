@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import { Client } from 'pg';
+// import { Client } from 'pg';
 
 import config from './config';
 
@@ -8,7 +8,7 @@ import config from './config';
 export class AppService {
   constructor(
     // @Inject('API_KEY') private apiKey: string,
-    @Inject('PG') private clientPg: Client,
+    // @Inject('PG') private clientPg: Client,
     @Inject('TASKS') private tasks: any[],
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
   ) {}
@@ -21,13 +21,13 @@ export class AppService {
 
   getTasks() {
     return new Promise((resolve, reject) => {
-      this.clientPg.query(`SELECT * FROM tasks`, (err, res) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        }
-        resolve(res.rows);
-      });
+      // this.clientPg.query(`SELECT * FROM tasks`, (err, res) => {
+      //   if (err) {
+      //     console.error(err);
+      //     reject(err);
+      //   }
+      //   resolve(res.rows);
+      // });
     });
   }
 }

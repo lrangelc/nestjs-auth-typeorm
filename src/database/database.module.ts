@@ -1,5 +1,5 @@
 import { Module, Global } from '@nestjs/common';
-import { Client } from 'pg';
+// import { Client } from 'pg';
 import { ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -32,17 +32,37 @@ const API_KEY_PROD = 'PROD1212121SA';
       inject: [config.KEY],
       useFactory: (configService: ConfigType<typeof config>) => {
         const { host, dbName, port, user, password } = configService.postgres;
+        // const { host, dbName, port, user, password } = configService.sqlserver;
+
+        // const { host, dbName, port, user, password } = configService.mysql;
+        console.log(host, dbName, port, user, password);
 
         return {
           type: 'postgres',
+          // type: 'mssql',
+          // type: 'mysql',
           host,
           port,
           username: user,
           password,
           database: dbName,
-          synchronize: true,
+          synchronize: false,
           autoLoadEntities: true,
+          options: {
+            encrypt: false,
+          },
         };
+        // return {
+        //   type: 'mysql',
+        //   host: 'localhost',
+        //   port: 3306,
+        //   username: 'root',
+        //   password: '123456',
+        //   database: 'my_DB',
+        //   entities: [],
+        //   synchronize: true,
+        //   autoLoadEntities: true,
+        // };
       },
     }),
   ],
@@ -51,24 +71,25 @@ const API_KEY_PROD = 'PROD1212121SA';
       provide: 'API_KEY',
       useValue: process.env.NODE_ENV === 'prod' ? API_KEY_PROD : API_KEY,
     },
-    {
-      provide: 'PG',
-      useFactory: (configService: ConfigType<typeof config>) => {
-        const { host, dbName, port, user, password } = configService.postgres;
-        const client = new Client({
-          host,
-          database: dbName,
-          port: port,
-          user,
-          password,
-        });
+    // {
+    //   provide: 'PG',
+    //   useFactory: (configService: ConfigType<typeof config>) => {
+    //     const { host, dbName, port, user, password } = configService.postgres;
+    //     const client = new Client({
+    //       host,
+    //       database: dbName,
+    //       port: port,
+    //       user,
+    //       password,
+    //     });
 
-        client.connect();
-        return client;
-      },
-      inject: [config.KEY],
-    },
+    //     client.connect();
+    //     return client;
+    //   },
+    //   inject: [config.KEY],
+    // },
   ],
-  exports: ['API_KEY', 'PG', TypeOrmModule],
+  // exports: ['API_KEY', 'PG', TypeOrmModule],
+  exports: ['API_KEY', TypeOrmModule],
 })
 export class DatabaseModule { }

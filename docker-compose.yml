@@ -41,3 +41,14 @@ services:
       - "8080:80"
     depends_on:
       - mysql
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=adminval2011*
+      - MSSQL_PID=Express
+    ports:
+      - '1433:1433'
+    volumes:
+      - ./sqlserver_data:/var/opt/mssql
