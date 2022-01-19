@@ -5,20 +5,22 @@ import { Repository } from 'typeorm';
 import { Product } from './../entities/product.entity';
 import { CreateProductDto, UpdateProductDto } from './../dtos/products.dtos';
 import { BrandsService } from './brands.service';
+import { CategoriesService } from './categories.service';
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
     private brandsService: BrandsService,
+    private categoriesService: CategoriesService,
   ) {}
 
   findAll() {
-    return this.productRepository.find({ relations: ['brand'] });
+    return this.productRepository.find({ relations: ['brand', 'categories'] });
   }
 
   async findOne(id: number) {
     const product = await this.productRepository.findOne(id, {
-      relations: ['brand'],
+      relations: ['brand', 'categories'],
     });
     if (!product) {
       throw new NotFoundException(`Product #${id} not found`);
@@ -39,6 +41,12 @@ export class ProductsService {
     if (data.brandId) {
       const brand = await this.brandsService.findOne(data.brandId);
       newProduct.brand = brand;
+    }
+    if (data.categoriesIds) {
+      const categories = await this.categoriesService.findByIds(
+        data.categoriesIds,
+      );
+      newProduct.categories = categories;
     }
     return this.productRepository.save(newProduct);
   }
