@@ -18,7 +18,7 @@ export class UsersService {
     // @Inject('PG') private clientPg: Client,
     @InjectRepository(User) private userRepo: Repository<User>,
     private customersService: CustomersService,
-  ) { }
+  ) {}
 
   findAll() {
     const apiKey = this.configService.get('API_KEY');

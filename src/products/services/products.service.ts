@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -6,13 +10,14 @@ import { Product } from './../entities/product.entity';
 import { CreateProductDto, UpdateProductDto } from './../dtos/products.dtos';
 import { BrandsService } from './brands.service';
 import { CategoriesService } from './categories.service';
+
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
     private brandsService: BrandsService,
     private categoriesService: CategoriesService,
-  ) {}
+  ) { }
 
   findAll() {
     return this.productRepository.find({ relations: ['brand', 'categories'] });
@@ -60,11 +65,52 @@ export class ProductsService {
       product.brand = brand;
     }
 
+    if (changes.categoriesIds) {
+      const categories = await this.categoriesService.findByIds(
+        changes.categoriesIds,
+      );
+      product.categories = categories;
+    }
+
     this.productRepository.merge(product, changes);
     return this.productRepository.save(product);
   }
 
   remove(id: number) {
     return this.productRepository.delete(id);
+  }
+
+  async removeCategoryByProduct(productId: number, categoryId: number) {
+    const product = await this.productRepository.findOne(productId, {
+      relations: ['categories'],
+    });
+    product.categories = product.categories.filter(
+      (item) => item.id !== categoryId,
+    );
+    return this.productRepository.save(product);
+  }
+
+  async addCategoryToProduct(productId: number, categoryId: number) {
+    const product = await this.productRepository.findOne(productId, {
+      relations: ['categories'],
+    });
+    if (!product) {
+      throw new NotFoundException(`Product #${productId} not found`);
+    }
+
+    const category = await this.categoriesService.findOne(categoryId);
+    if (!category) {
+      throw new NotFoundException(`Category #${categoryId} not found`);
+    }
+
+    if (product.categories.find((item) => item.id == categoryId)) {
+      throw new ConflictException(
+        `Category #${categoryId} is already present in this product`,
+      );
+    } else {
+      product.categories.push(category);
+    }
+
+    return this.productRepository.save(product);
   }
 }

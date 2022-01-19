@@ -10,6 +10,7 @@ import {
 
 import { Brand } from './brand.entity';
 import { Category } from './category.entity';
+
 @Entity({ name: 'product' })
 export class Product {
   @PrimaryGeneratedColumn()
