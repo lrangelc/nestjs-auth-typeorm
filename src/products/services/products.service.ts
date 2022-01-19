@@ -10,7 +10,7 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
     private brandsService: BrandsService,
-  ) { }
+  ) {}
 
   findAll() {
     return this.productRepository.find({ relations: ['brand'] });
