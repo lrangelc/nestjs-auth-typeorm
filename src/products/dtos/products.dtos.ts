@@ -6,7 +6,6 @@ import {
   IsPositive,
   IsArray,
   IsOptional,
-  isPositive,
   Min,
   ValidateIf,
 } from 'class-validator';
@@ -51,7 +50,7 @@ export class CreateProductDto {
   readonly categoriesIds: number[];
 }
 
-export class UpdateProductDto extends PartialType(CreateProductDto) { }
+export class UpdateProductDto extends PartialType(CreateProductDto) {}
 
 export class FilterProductsDto {
   @IsOptional()
