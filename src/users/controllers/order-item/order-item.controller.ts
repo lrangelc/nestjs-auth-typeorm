@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Patch,
+  Delete,
 } from '@nestjs/common';
 
 import {
@@ -39,5 +40,10 @@ export class OrderItemController {
     @Body() payload: UpdateOrderItemDto,
   ) {
     return this.orderItemService.update(id, payload);
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.orderItemService.remove(+id);
   }
 }

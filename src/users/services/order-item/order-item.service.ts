@@ -55,4 +55,8 @@ export class OrderItemService {
     this.orderItemRepo.merge(orderItem, changes);
     return this.orderItemRepo.save(orderItem);
   }
+
+  remove(id: number) {
+    return this.orderItemRepo.delete(id);
+  }
 }
