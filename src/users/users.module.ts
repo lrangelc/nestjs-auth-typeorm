@@ -30,5 +30,6 @@ import { ProductsModule } from '../products/products.module';
     OrderItemController,
   ],
   providers: [CustomersService, UsersService, OrdersService, OrderItemService],
+  exports: [UsersService],
 })
 export class UsersModule {}
