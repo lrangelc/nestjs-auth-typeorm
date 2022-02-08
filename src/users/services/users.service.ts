@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
@@ -19,7 +19,7 @@ export class UsersService {
     // @Inject('PG') private clientPg: Client,
     @InjectRepository(User) private userRepo: Repository<User>,
     private customersService: CustomersService,
-  ) { }
+  ) {}
 
   findAll() {
     const apiKey = this.configService.get('API_KEY');
