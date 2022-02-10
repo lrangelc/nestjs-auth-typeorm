@@ -7,6 +7,7 @@ export default registerAs('config', () => {
       port: process.env.DATABASE_PORT,
     },
     apiKey: process.env.API_KEY,
+    jwtSecret: process.env.JWT_SECRET,
     postgres: {
       host: process.env.POSTGRES_HOST,
       dbName: process.env.POSTGRES_DB,
