@@ -8,6 +8,7 @@ export default registerAs('config', () => {
     },
     apiKey: process.env.API_KEY,
     jwtSecret: process.env.JWT_SECRET,
+    postgresUrl: process.env.DATABASE_URL,
     postgres: {
       host: process.env.POSTGRES_HOST,
       dbName: process.env.POSTGRES_DB,

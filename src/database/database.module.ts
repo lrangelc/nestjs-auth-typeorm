@@ -39,19 +39,30 @@ const API_KEY_PROD = 'PROD1212121SA';
 
         return {
           type: 'postgres',
-          // type: 'mssql',
-          // type: 'mysql',
-          host,
-          port,
-          username: user,
-          password,
-          database: dbName,
+          url: configService.postgresUrl,
           synchronize: false,
           autoLoadEntities: true,
-          options: {
-            encrypt: false,
+          ssl: {
+            rejectUnauthorized: false,
           },
         };
+
+        // return {
+        //   type: 'postgres',
+        //   // type: 'mssql',
+        //   // type: 'mysql',
+        //   host,
+        //   port,
+        //   username: user,
+        //   password,
+        //   database: dbName,
+        //   synchronize: false,
+        //   autoLoadEntities: true,
+        //   options: {
+        //     encrypt: false,
+        //   },
+        // };
+
         // return {
         //   type: 'mysql',
         //   host: 'localhost',
@@ -92,4 +103,4 @@ const API_KEY_PROD = 'PROD1212121SA';
   // exports: ['API_KEY', 'PG', TypeOrmModule],
   exports: ['API_KEY', TypeOrmModule],
 })
-export class DatabaseModule { }
+export class DatabaseModule {}
